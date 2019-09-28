@@ -1,0 +1,65 @@
+import React, {Component} from 'react';
+import './App.css';
+
+class App extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      noteText:'',
+      notes:[]
+    }
+  }
+  handleChange = (e) => {
+    this.setState({
+      noteText: e.target.value
+    })
+  }
+  deleteNote = (index) => {
+    let noteArr = this.state.notes;
+    noteArr.splice(index,1)
+    this.setState({notes:noteArr})
+  }
+  addNote = () => {
+    if(this.state.noteText === ''){return} 
+    let noteArr = this.state.notes;
+    noteArr.push(this.state.noteText)
+    console.log(noteArr)
+    this.setState({
+      noteText:'',
+      notes: noteArr
+    })
+    this.textInput.focus()
+  }
+  handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      let noteArr = this.state.notes;
+      noteArr.push(this.state.noteText)
+      this.setState({noteText:''})
+    }
+  }
+  componentDidMount(){
+    this.textInput.focus();
+    console.log(this.state)
+  }
+  render(){
+    let notes = this.state.notes.map((value,key)=>{
+      return <div className="note" key={key} onClick={key => this.deleteNote(key)}>{value}</div>
+    })
+    return(
+      <div className="container">
+        <div className="header">React Todo Application</div>
+        {notes}
+        <div className="btn" onClick={this.addNote}>+</div>
+        <input type="text" 
+        className="textInput"
+        ref={((input)=>{this.textInput = input})}
+        value={this.state.noteText}
+        onChange={this.handleChange} 
+        onKeyPress={this.handleKeyPress}
+        />
+      </div>
+    )
+  }
+}
+
+export default App
